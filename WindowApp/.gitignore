@@ -1,0 +1,27 @@
+# Ignore Python cache and virtual environment
+__pycache__/
+venv/
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore build & dist folders
+build/
+dist/
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore AI Model files
+junker.pt
+
+# Ignore specific text files
+readme.txt
+
+# Ignore all images in 'pic' folder
+pic/*
+
+# Ignore all detected images
+img_detect/*
