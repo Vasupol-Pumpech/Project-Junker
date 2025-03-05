@@ -18,7 +18,7 @@ def mqtt_and_detect_loop():
 
 def schedule_notifications():
     # ตั้งเวลาส่งรายวัน
-    schedule.every().day.at("18:00").do(send_garbage_summary, "day")
+    schedule.every().day.at("20:00").do(send_garbage_summary, "day")
 
     while True:
         try:

@@ -1,7 +1,7 @@
 import requests
 from sql import (get_bin_level_location, get_user_role_sql, get_user_info_sql, save_user_sql, get_all_users,
                 delete_user_by_name, get_all_user_names,get_bin_ids_with_location,get_garbage_summary)
-
+from datetime import datetime, timedelta
 
 API_Token = "7865144579:AAFsnmxR_YViwwpwh_f3FPB6U9PIiTMYRhg"
 ADMIN_PASSWORD = "2523"  
@@ -83,25 +83,52 @@ def list_all_bins(chat_id):
 
     sendmessage(chat_id, message)
 
+
+# ชื่อเดือนภาษาไทย
+thai_months = [
+    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+]
+
 def send_garbage_summary(date_type="day"):
-    """ ส่งข้อมูลปริมาณขยะผ่าน Telegram """
-    summary = get_garbage_summary(date_type)
-    if not summary:
-        message = f"📢 ไม่พบข้อมูลปริมาณขยะสำหรับ {date_type} นี้"
+    """ ส่งข้อมูลปริมาณขยะผ่าน Telegram พร้อมระบุวัน/เดือน/ปี ของไทย """
+
+    now = datetime.now()
+    
+    # คำนวณวันที่ที่ใช้ในรายงาน
+    if date_type == "day":
+        report_date = f"{now.day} {thai_months[now.month - 1]} {now.year + 543}"  # วันนี้ (วัน เดือน พ.ศ.)
+    elif date_type == "month":
+        last_month = now.month - 1 if now.month > 1 else 12  # เดือนที่แล้ว
+        last_year = now.year if now.month > 1 else now.year - 1  # ปรับปีถ้าเดือนเป็น ม.ค.
+        report_date = f"{thai_months[last_month - 1]} {last_year + 543}"
+    elif date_type == "year":
+        report_date = f"{now.year + 543 - 1}"  # ปีที่แล้ว (พ.ศ.)
     else:
-        message = f"📢 รายงานปริมาณขยะ ({date_type}) 📢\n"
+        report_date = "ไม่ระบุ"
+
+    # ดึงข้อมูลสรุปขยะ
+    summary = get_garbage_summary(date_type)
+    
+    if not summary:
+        message = f"📢 ไม่พบข้อมูลปริมาณขยะสำหรับ {date_type} ({report_date})"
+    else:
+        message = f"📢 รายงานปริมาณขยะ ({report_date}) 📢\n"
         total_count = sum(item["count"] for item in summary)
         message += f"🗑️ ขยะทั้งหมด: {total_count} ชิ้น\n"
+
         icon_map = {
             "bottle": "🍾 ขวด",
             "can": "🥫 กระป๋อง",
             "papercup": "🥤 แก้วกระดาษ",
             "non_object": "🗑️ อื่นๆ"
         }
+
         for item in summary:
             garbage_type = icon_map.get(item["garbage_type"], item["garbage_type"])
             message += f"- {garbage_type}: {item['count']} ชิ้น\n"
 
+    # ส่งข้อความไปยัง Telegram
     sendmessageto("admin", message)
 
 def test_garbage_notifications():

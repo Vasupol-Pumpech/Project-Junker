@@ -801,17 +801,20 @@ def get_garbage_summary(date_type="day"):
     try:
         if date_type == "day":
             date_format = "%Y-%m-%d"
+            date_query = "CURDATE()"  # ใช้วันปัจจุบัน
         elif date_type == "month":
             date_format = "%Y-%m"
+            date_query = "DATE_FORMAT(NOW() - INTERVAL 1 MONTH, '%Y-%m')"  # ใช้เดือนที่แล้ว
         elif date_type == "year":
             date_format = "%Y"
+            date_query = "DATE_FORMAT(NOW() - INTERVAL 1 YEAR, '%Y')"  # ใช้ปีที่แล้ว
         else:
             return None
 
         query = f"""
             SELECT garbage_type, COUNT(*) AS count
             FROM tbl_garbage
-            WHERE DATE_FORMAT(garbage_date, '{date_format}') = DATE_FORMAT(NOW(), '{date_format}')
+            WHERE DATE_FORMAT(garbage_date, '{date_format}') = {date_query}
             GROUP BY garbage_type
         """
         cursor.execute(query)

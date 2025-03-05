@@ -4,7 +4,7 @@ from PyInstaller.utils.hooks import collect_all
 
 datas = []
 binaries = []
-hiddenimports = ['requests', 'numpy', 'cv2', 'PyQt5', 'paho.mqtt', 'ultralytics.utils', 'ultralytics.cfg']
+hiddenimports = ['requests', 'numpy', 'cv2', 'PyQt5', 'paho.mqtt', 'ultralytics.utils', 'ultralytics.cfg', 'ultralytics.models.yolo', 'ultralytics.nn.tasks', 'ultralytics.utils.checks']
 hiddenimports += collect_submodules('ultralytics')
 tmp_ret = collect_all('ultralytics')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]

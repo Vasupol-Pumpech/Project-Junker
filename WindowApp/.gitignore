@@ -25,3 +25,6 @@ pic/*
 
 # Ignore all detected images
 img_detect/*
+
+isrgrootx1.pem
+test.py
