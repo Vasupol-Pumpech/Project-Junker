@@ -18,7 +18,7 @@ const char* mqtt_start = "junker/1/start";
 const char* mqtt_detected = "junker/1/detected";
 const char* mqtt_Setlevel = "junker/1/level";
 const char* mqtt_SendReady = "junker/1/ready";
-const char* mqtt_Stuck = "junker/1/stuck";
+const char* mqtt_stuck = "junker/1/stuck";
 
 String detected = "none";
 bool ready = false;
@@ -80,25 +80,24 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
       ready = true;
       readyReceived = true;
       lastReadyTime = millis();
-      GreenOn();
+      //GreenOn();
       
-    } else if (String(topic) == mqtt_Stuck){
-      String payloadStr = String((char*)payload);
-        if (payloadStr == "stuck") {
-          Serial.println("Object Stuck Detected!");
-          stuck = true;
-          GreenOFF();
-      } else if (payloadStr == "unstuck"){
-        stuck = false;
-        GreenOn();
-      }
+    } else if (String(topic) == mqtt_stuck){
+        String message = "";
+        for (int i = 0; i < length; i++) {
+            message += (char)payload[i];
+        }
+        if (message == "stuck") {
+            stuck = true;
+        } else if (message == "unstuck") {
+            stuck = false;
+        }
     }
-
 }
 
 void checkReadyTimeout() {
     if (readyReceived && millis() - lastReadyTime > readyTimeout) {
-        GreenOFF();
+        //GreenOFF();
         readyReceived = false;
     }
 }
@@ -133,7 +132,8 @@ void reconnectMQTT() {
             client.subscribe(mqtt_detected);
             client.subscribe(mqtt_Setlevel);
             client.subscribe(mqtt_SendReady);
-            client.subscribe(mqtt_Stuck);
+            client.subscribe(mqtt_stuck);
+            
             Serial.println("Subscribed to topics:");
             Serial.println(String(mqtt_detected));
             Serial.println(String(mqtt_Setlevel));

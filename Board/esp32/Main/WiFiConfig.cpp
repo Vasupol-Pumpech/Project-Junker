@@ -37,17 +37,17 @@ void sendWiFiCredentials() {
     Serial.println(wifiData.password);
 
     displayText("Camera WiFi connect...");
-    // while (!sendWiFiSuccess) {  //ส่งซ้ำจนกว่า Send Status จะเป็น Success
-    //     esp_err_t result = esp_now_send(receiverMacAddress, (uint8_t *)&wifiData, sizeof(wifiData));
+    while (!sendWiFiSuccess) {  //ส่งซ้ำจนกว่า Send Status จะเป็น Success
+        esp_err_t result = esp_now_send(receiverMacAddress, (uint8_t *)&wifiData, sizeof(wifiData));
 
-    //     if (result == ESP_OK) {
-    //         Serial.println("ESP-NOW Data Sent (Waiting for Success Status)...");
-    //     } else {
-    //         Serial.println("ESP-NOW Send Failed, Retrying...");
-    //     }
+        if (result == ESP_OK) {
+            Serial.println("ESP-NOW Data Sent (Waiting for Success Status)...");
+        } else {
+            Serial.println("ESP-NOW Send Failed, Retrying...");
+        }
 
-    //     delay(2000);  // หน่วงเวลา 2 วินาทีก่อนลองใหม่
-    // }
+        delay(2000);  // หน่วงเวลา 2 วินาทีก่อนลองใหม่
+    }
 
     Serial.println("WiFi Credentials Sent Successfully with ESP-NOW!");
 }

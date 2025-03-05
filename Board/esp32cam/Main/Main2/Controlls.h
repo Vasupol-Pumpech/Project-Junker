@@ -8,6 +8,7 @@ extern bool objectDetected;
 void setup_Controlls();
 void doorClose();
 void doorOpen();
+void doorStart();
 long microsecondsToCentimeters(long microseconds);
 
 

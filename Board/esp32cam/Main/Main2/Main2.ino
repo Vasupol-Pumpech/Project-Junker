@@ -82,7 +82,7 @@ void setup() {
     startCameraServer();
     reconnectMQTT();
     sendMQTTMessageStr(mqtt_SendReady, "Ready");
-    doorClose();
+    doorStart();
 
 }
 
@@ -92,7 +92,6 @@ void loop() {
         reconnectMQTT();
     }
     client.loop();
-
     int sensorState = digitalRead(SENSOR_PIN);
 
     if (sensorState == LOW) {

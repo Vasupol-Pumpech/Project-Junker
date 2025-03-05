@@ -72,17 +72,17 @@ void loop() {
     }
     client.loop();
 
-    // //checkReadyTimeout();
-
-    // if (stuck == true){
-    //   digitalWrite(NotiStuck_PIN, HIGH);
-    //   displayClear();
-    //   displayText("Oject Stuck !!");
-    //   delay(1000);
-    // }else{
-    //   digitalWrite(NotiStuck_PIN, LOW);
-    // }
-    
+    if (stuck == true){
+      digitalWrite(NotiStuck_PIN, HIGH);
+      displayClear();
+      displayText("Oject Stuck !!");
+      delay(1000);
+      displayClear();
+      return;
+    }else{
+      digitalWrite(NotiStuck_PIN, LOW);
+    }
+    delay(1000);
     // Serial.println("test penraiwa");
     displayBMP("/bottle2.bmp", 5, 20, bin_level_bottle);
     displayBMP("/can2.bmp", 160, 20, bin_level_can);
@@ -114,7 +114,7 @@ void loop() {
             
           } else if (bin_level_bottle >= min_level && bin_level_bottle < max_level) {
             displayClear();
-            displayFound("/bottle2.bmp", 60, 80, "Almost full");
+            displayFound("/bottle2.bmp", 40, 80, "Almost full");
             detected = "none";
             moveToTrashType("bottle");
             delay(2000);
@@ -126,7 +126,7 @@ void loop() {
             displayClear();
           }else{
             displayClear();
-            displayFound("/bottle2.bmp", 60, 80, "BOTTLE");
+            displayFound("/bottle2.bmp", 40, 80, "BOTTLE");
             detected = "none";
             moveToTrashType("bottle");
             delay(2000);
@@ -168,7 +168,7 @@ void loop() {
             displayClear();
           }else{
             displayClear();
-            displayFound("/can2.bmp", 60, 80, "CAN");
+            displayFound("/can2.bmp", 40, 80, "CAN");
             detected = "none";
             moveToTrashType("can");
             delay(2000);
@@ -210,7 +210,7 @@ void loop() {
             displayClear();
           }else{
             displayClear();
-            displayFound("/papercup2.bmp", 60, 80, "PAPPERCUP");
+            displayFound("/papercup2.bmp", 40, 80, "PAPPERCUP");
             detected = "none";
             moveToTrashType("papercup");
             delay(2000);
@@ -240,7 +240,7 @@ void loop() {
             detected = "none";
           } else if (bin_level_others >= min_level && bin_level_others < max_level) {
             displayClear();
-            displayFound("/other2.bmp", 60, 80, "Almost full");
+            displayFound("/other2.bmp", 40, 80, "Almost full");
             detected = "none";
             moveToTrashType("non_object");
             delay(2000);
@@ -252,7 +252,7 @@ void loop() {
             displayClear();
           }else{  
             displayClear();
-            displayFound("/other2.bmp", 60, 80, "OTHER");
+            displayFound("/other2.bmp", 40, 80, "OTHER");
             detected = "none";
             moveToTrashType("non_object");
             delay(2000);

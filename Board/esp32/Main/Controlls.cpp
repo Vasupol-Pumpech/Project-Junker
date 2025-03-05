@@ -1,10 +1,12 @@
 #include "Controlls.h"
 #include "Monitor.h"
 #include "MQTTConfig.h"
+#include <Arduino.h>
 
-#define MOTOR_PWM 13  // ขาควบคุมความเร็ว
+
+// #define MOTOR_PWM 13  // ขาควบคุมความเร็ว
 #define MOTOR_IN1 27  // ควบคุมทิศทาง 
-#define MOTOR_IN2 GND  // ตั้ง LOW ตลอด เพราะหมุนขวาอย่างเดียว
+#define MOTOR_IN2 16  // ตั้ง LOW ตลอด 
 
 #define LIMIT_BOTTLE  32   // Limit Switch ตำแหน่ง 0° (Bottle)
 #define LIMIT_CAN 33       // Limit Switch ตำแหน่ง 90° (Can)
@@ -13,11 +15,8 @@
 
 #define LIMIT_STOP 19   // Limit Stop For backdoor open
 
-
 #define pingPin 22 // ขา Trigger
 #define inPin  21   // ขา Echo
-
-#define LED_PIN  4   
 
 long duration, cm, levelValue;
 int currentPosition = 1;
@@ -37,41 +36,50 @@ int TANK_MAX = 44;     // ระยะสูงสุดจากเซ็นเ
 void setup_Controlls() {
   pinMode(pingPin, OUTPUT);
   pinMode(inPin, INPUT);
-  pinMode(MOTOR_PWM, OUTPUT);
+  
+  // pinMode(MOTOR_PWM, OUTPUT);
   pinMode(MOTOR_IN1, OUTPUT);
-  digitalWrite(MOTOR_IN1, HIGH); 
-  pinMode(LED_PIN, OUTPUT);   
+  pinMode(MOTOR_IN2, OUTPUT);
+  
+  digitalWrite(MOTOR_IN2, LOW);  // ตั้งค่า MOTOR_IN2 เป็น LOW เพื่อให้มอเตอร์หมุนด้านเดียว
+  
   pinMode(LIMIT_BOTTLE, INPUT_PULLUP);
   pinMode(LIMIT_CAN, INPUT_PULLUP);
   pinMode(LIMIT_PAPERCUP, INPUT_PULLUP);
   pinMode(LIMIT_OTHER, INPUT_PULLUP);
   pinMode(LIMIT_STOP, INPUT_PULLUP);
-  stopMotor();
+  
+  stopMotor();  // ให้มอเตอร์หยุดเมื่อเริ่มต้น
 }
 
 
-void GreenOn(){
-  digitalWrite(LED_PIN, HIGH);
-}
+// void GreenOn(){
+//   digitalWrite(LED_PIN, HIGH);
+// }
 
-void GreenOFF(){
-  digitalWrite(LED_PIN, LOW);
-}
+// void GreenOFF(){
+//   digitalWrite(LED_PIN, LOW);
+// }
 
-
-
-void stopMotor() {
-  pinMode(MOTOR_PWM, OUTPUT);
-  pinMode(MOTOR_IN1, OUTPUT);
-  digitalWrite(MOTOR_IN1, HIGH); 
-  analogWrite(MOTOR_PWM, 0); 
-}
 
 void moveMotor() {
-  pinMode(MOTOR_PWM, OUTPUT);
-  pinMode(MOTOR_IN1, OUTPUT);
-  digitalWrite(MOTOR_IN1, HIGH); 
-  analogWrite(MOTOR_PWM, 255); 
+    // pinMode(MOTOR_PWM, OUTPUT);
+    pinMode(MOTOR_IN1, OUTPUT);
+    pinMode(MOTOR_IN2, OUTPUT);
+
+    digitalWrite(MOTOR_IN1, HIGH);
+    digitalWrite(MOTOR_IN2, LOW);
+    // analogWrite(MOTOR_PWM, 255);  
+}
+
+void stopMotor() {
+    // pinMode(MOTOR_PWM, OUTPUT);
+    pinMode(MOTOR_IN1, OUTPUT);
+    pinMode(MOTOR_IN2, OUTPUT);
+    
+    digitalWrite(MOTOR_IN1, LOW);
+    digitalWrite(MOTOR_IN2, LOW);
+    // analogWrite(MOTOR_PWM, 0);
 }
 
 long microsecondsToCentimeters(long microseconds) {
@@ -109,6 +117,7 @@ void moveToTrashType(String detected) {
     targetPosition = 270;
   } else {
     Serial.println("Invalid trash type!");
+    return; 
   }
 
   Serial.print("Moving to ");
