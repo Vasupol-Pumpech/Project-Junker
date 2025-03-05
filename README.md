@@ -10,6 +10,6 @@
 (https://drive.google.com/uc?export=download&id=1n5YLUGlnUxTuTJPhh40X-Iohkgdol2ix)
 
 
-📥 [คลิกที่นี่เพื่อดาวน์โหลดไฟล์ Database]
+📥 [คลิกที่นี่เพื่อดาวน์โหลดไฟล์ Database] (*ควรตั้งชื่อฐานข้อมูลว่า Junker)
 
 (https://drive.google.com/uc?export=download&id=1BLjGyMBM8jT2__9eBNSOpOgEPWokkxWo)
