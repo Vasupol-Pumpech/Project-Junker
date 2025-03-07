@@ -14,11 +14,11 @@ void setup_Controlls();
 void check_level();
 void check_All_Level();
 void BackDoor();
-// void dropGabage();
-// void dropGage_max();
+void LedOn();
+void LedOFF();
 void moveToTrashType(String detected);
 void stopMotor();
 void GreenOn();
 void GreenOFF();
-// void start_servo();
+
 #endif

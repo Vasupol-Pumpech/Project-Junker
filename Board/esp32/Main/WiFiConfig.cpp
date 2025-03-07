@@ -3,7 +3,7 @@
 #include "Monitor.h"
 #include <esp_now.h>
 #include <string.h>
-
+#include "Controlls.h"
 WiFiManager wm;
 uint8_t receiverMacAddress[] = {0x7C, 0x87, 0xCE, 0x31, 0xC0, 0x3C};
 volatile bool sendWiFiSuccess = false;
@@ -161,8 +161,7 @@ void setup_wifi() {
     displayText("WiFi Name : Junker");
     delay(1000);
     displayText("Wait config WiFi");
-    
-
+    LedOFF();
     bool wifiConnected = wm.autoConnect("Junker", "12345678");
 
     if (!wifiConnected || WiFi.status() != WL_CONNECTED) {
@@ -181,6 +180,7 @@ void setup_wifi() {
     Serial.println("WiFi เชื่อมต่อสำเร็จ!");
     displayText("WiFi Connected");
     delay(5000);
+    LedOn();
     setup_espnow();
     sendWiFiCredentials();
 }
@@ -197,6 +197,10 @@ void check_wifi() {
             displayClear();
             displayText("Connecting to WiFi...");
             count_try ++;
+            LedOn();
+            delay(500);
+            LedOFF();
+            delay(500);
 
             if(count_try >=12){
               Serial.println("WiFi ไม่สามารถเชื่อมต่อได้");
@@ -212,6 +216,7 @@ void check_wifi() {
         }
         Serial.println("\nWiFi เชื่อมต่อสำเร็จ!");
         displayClear();
+        LedOn();
         displayText("WiFi Connected");
     }
 }

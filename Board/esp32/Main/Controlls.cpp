@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 
-// #define MOTOR_PWM 13  // ขาควบคุมความเร็ว
+#define LED 17 
 #define MOTOR_IN1 27  // ควบคุมทิศทาง 
 #define MOTOR_IN2 16  // ตั้ง LOW ตลอด 
 
@@ -29,19 +29,20 @@ int bin_level_others = 0;
 int backdoor = 0;
 bool backdoor_state = false;
 
-int SENSOR_OFFSET = 1;  // ระยะที่เซ็นเซอร์สูงกว่าถัง
-int TANK_MAX = 44;     // ระยะสูงสุดจากเซ็นเซอร์ไปถึงก้นถัง
+int SENSOR_OFFSET = 1;  
+int TANK_MAX = 44;     
 
 
 void setup_Controlls() {
+  pinMode(LED, OUTPUT);
+  LedOFF();
   pinMode(pingPin, OUTPUT);
   pinMode(inPin, INPUT);
   
-  // pinMode(MOTOR_PWM, OUTPUT);
   pinMode(MOTOR_IN1, OUTPUT);
   pinMode(MOTOR_IN2, OUTPUT);
   
-  digitalWrite(MOTOR_IN2, LOW);  // ตั้งค่า MOTOR_IN2 เป็น LOW เพื่อให้มอเตอร์หมุนด้านเดียว
+  digitalWrite(MOTOR_IN2, LOW);  
   
   pinMode(LIMIT_BOTTLE, INPUT_PULLUP);
   pinMode(LIMIT_CAN, INPUT_PULLUP);
@@ -53,13 +54,13 @@ void setup_Controlls() {
 }
 
 
-// void GreenOn(){
-//   digitalWrite(LED_PIN, HIGH);
-// }
+void LedOn(){
+  digitalWrite(LED, LOW);
+}
 
-// void GreenOFF(){
-//   digitalWrite(LED_PIN, LOW);
-// }
+void LedOFF(){
+  digitalWrite(LED, HIGH);
+}
 
 
 void moveMotor() {

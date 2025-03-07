@@ -80,7 +80,6 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
       ready = true;
       readyReceived = true;
       lastReadyTime = millis();
-      //GreenOn();
       
     } else if (String(topic) == mqtt_stuck){
         String message = "";
@@ -97,7 +96,6 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
 void checkReadyTimeout() {
     if (readyReceived && millis() - lastReadyTime > readyTimeout) {
-        //GreenOFF();
         readyReceived = false;
     }
 }
@@ -121,7 +119,7 @@ void setup_mqtt() {
 
 void reconnectMQTT() {
     int count_try = 0;
-
+    LedOFF();
     while (!client.connected()) {
         displayClear();
         Serial.println("Connecting to MQTT...");
@@ -129,6 +127,7 @@ void reconnectMQTT() {
         if (client.connect("ESP32Client_1", mqtt_username, mqtt_password)) {
             Serial.println("MQTT connected");
             displayText("MQTT connected");
+            LedOn();
             client.subscribe(mqtt_detected);
             client.subscribe(mqtt_Setlevel);
             client.subscribe(mqtt_SendReady);

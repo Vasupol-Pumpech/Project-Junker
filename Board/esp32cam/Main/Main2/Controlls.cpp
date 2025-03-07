@@ -15,9 +15,9 @@ void doorClose() {
   if (!door) { 
     Serial.println("Door is already closed.");
   }else{
-    for (int pos = 15; pos <= 120; pos += 3) {
+    for (int pos = 36; pos <= 120; pos += 3) {  // 28
       myServo.write(pos);
-      delay(57); 
+      delay(36);  // 1 วิ
     }
   }
   door = false; 
@@ -28,17 +28,15 @@ void doorOpen() {
   if (door) { 
     Serial.println("Door is already open.");
   }else{
-    for (int pos = 120; pos >= 15; pos -= 3) {
+    for (int pos = 120; pos >= 36; pos -= 3) {
       myServo.write(pos);
-      delay(57); 
+      delay(36); 
     }
   }
 
   door = true; 
   Serial.println("Door is Open");
 }
-
-
 
 
 void setup_Controlls() {

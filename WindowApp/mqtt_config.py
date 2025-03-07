@@ -69,6 +69,9 @@ def on_message(client, userdata, message):
         # เช็คว่าก่อนหน้านี้สถานะเป็น offline หรือไม่
         if bin_last_status.get(machine_id, 1) == 0:
             sendmessageto("admin", f"✅ ถังขยะที่ {machine_id} - {location} กลับมาออนไลน์แล้ว")
+        
+        if bin_last_status.get(machine_id, 1) == 1:
+            return
 
         # อัปเดตสถานะเป็น online
         handle_report_status(machine_id, status=1)

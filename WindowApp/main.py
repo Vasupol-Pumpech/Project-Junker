@@ -5,7 +5,12 @@ import threading
 import schedule
 from PyQt5.QtWidgets import QApplication
 from GarbageDetails import GarbageDetailsWindow
-from Telegram import telegram_loop,send_garbage_summary
+from Telegram import telegram_loop, send_garbage_summary
+
+# ตัวแปรเก็บสถานะการแจ้งเตือน
+last_notified_day = None
+last_notified_month = None
+last_notified_year = None
 
 # ฟังก์ชันหลักสำหรับ MQTT loop และ image detection
 def mqtt_and_detect_loop():
@@ -17,6 +22,8 @@ def mqtt_and_detect_loop():
         print("Program stopped.")
 
 def schedule_notifications():
+    global last_notified_day, last_notified_month, last_notified_year
+
     # ตั้งเวลาส่งรายวัน
     schedule.every().day.at("20:00").do(send_garbage_summary, "day")
 
@@ -24,13 +31,15 @@ def schedule_notifications():
         try:
             now = datetime.now()
 
-            # ตรวจสอบว่าถึงวันแรกของเดือนหรือยัง แล้วส่งแจ้งเตือนรายเดือน
-            if now.day == 1:
+            # ส่งแจ้งเตือนรายเดือนเฉพาะวันแรกของเดือน และยังไม่เคยส่งในเดือนนั้น
+            if now.day == 1 and last_notified_month != now.month:
                 send_garbage_summary("month")
+                last_notified_month = now.month  # อัปเดตสถานะว่าเดือนนี้แจ้งเตือนแล้ว
 
-            # ตรวจสอบว่าถึงวันที่ 1 มกราคมของปีใหม่ แล้วส่งแจ้งเตือนรายปี
-            if now.month == 1 and now.day == 1:
+            # ส่งแจ้งเตือนรายปีเฉพาะวันที่ 1 มกราคม และยังไม่เคยส่งในปีนั้น
+            if now.month == 1 and now.day == 1 and last_notified_year != now.year:
                 send_garbage_summary("year")
+                last_notified_year = now.year  # อัปเดตสถานะว่าแจ้งเตือนรายปีแล้ว
 
             schedule.run_pending()
         except Exception as e:

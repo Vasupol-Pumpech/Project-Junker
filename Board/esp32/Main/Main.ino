@@ -58,8 +58,8 @@ void setup() {
     displayClear();
     sendBinLevelData(bin_level_bottle, bin_level_can, bin_level_papercup, bin_level_others);
     pinMode(NotiStuck_PIN, OUTPUT);
-    digitalWrite(NotiStuck_PIN, LOW);
-
+    digitalWrite(NotiStuck_PIN, HIGH);
+    LedOn();
 }
 
 void loop() {
@@ -73,14 +73,16 @@ void loop() {
     client.loop();
 
     if (stuck == true){
-      digitalWrite(NotiStuck_PIN, HIGH);
+      digitalWrite(NotiStuck_PIN, LOW);
       displayClear();
       displayText("Oject Stuck !!");
       delay(1000);
       displayClear();
+      LedOFF();
       return;
     }else{
-      digitalWrite(NotiStuck_PIN, LOW);
+      digitalWrite(NotiStuck_PIN, HIGH);
+      LedOn();
     }
     delay(1000);
     // Serial.println("test penraiwa");
