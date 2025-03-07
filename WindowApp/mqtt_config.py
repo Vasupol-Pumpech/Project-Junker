@@ -2,15 +2,18 @@ import paho.mqtt.client as mqtt
 import ssl
 import time
 import json 
+from dotenv import load_dotenv
+import os
 from detect import request_image_and_detect
 from sql import save_bin_level,save_bin_status,get_bin_status,handle_report_status,get_bin_location
 from Telegram import sendmessageto
 
-# ข้อมูล MQTT
-mqtt_broker = "xxxx"
+load_dotenv()
+
+mqtt_broker = os.getenv("MQTT_BROKER")
 mqtt_port = 8883
-mqtt_username = "junker"
-mqtt_password = "xxxx"
+mqtt_username = os.getenv("MQTT_USERNAME")
+mqtt_password = os.getenv("MQTT_PASSWORD")
 mqtt_camera = "junker/+/camera"
 mqtt_binlevel = "junker/+/binLevel"
 mqtt_status = "junker/+/online"

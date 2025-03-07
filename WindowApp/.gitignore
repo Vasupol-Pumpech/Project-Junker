@@ -30,3 +30,6 @@ isrgrootx1.pem
 test.py
 junker.spec
 bin.ico
+
+config.h
+.env
