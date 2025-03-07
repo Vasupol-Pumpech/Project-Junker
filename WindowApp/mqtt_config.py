@@ -7,10 +7,10 @@ from sql import save_bin_level,save_bin_status,get_bin_status,handle_report_stat
 from Telegram import sendmessageto
 
 # ข้อมูล MQTT
-mqtt_broker = "71df9698816a4b6ea2e24e7b6e73ac93.s1.eu.hivemq.cloud"
+mqtt_broker = "xxxx"
 mqtt_port = 8883
 mqtt_username = "junker"
-mqtt_password = "Bb54658668"
+mqtt_password = "xxxx"
 mqtt_camera = "junker/+/camera"
 mqtt_binlevel = "junker/+/binLevel"
 mqtt_status = "junker/+/online"
