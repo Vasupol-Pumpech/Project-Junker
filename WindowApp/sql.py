@@ -171,7 +171,7 @@ def save_bin_status(bin_id, bin_status):
                 """,
                 (bin_status, bin_id)
             )
-            print(f"Updated bin_status for bin_id {bin_id} to {bin_status}")
+            #print(f"Updated bin_status for bin_id {bin_id} to {bin_status}")
         else:
             # หากไม่มี bin_id ให้เพิ่มแถวใหม่ในตาราง
             cursor.execute(
