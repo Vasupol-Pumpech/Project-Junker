@@ -2,10 +2,10 @@
 #include "Controlls.h"
 
 // ข้อมูล MQTT
-const char* mqtt_server = "xxx";
+const char* mqtt_server = "71df9698816a4b6ea2e24e7b6e73ac93.s1.eu.hivemq.cloud";
 const int mqtt_port = 8883;
 const char* mqtt_username = "junker";
-const char* mqtt_password = "xxx";
+const char* mqtt_password = "Bb54658668";
 
 // public
 const char* mqtt_status = "junker/1/online";

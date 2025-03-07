@@ -8,7 +8,7 @@ extern int bin_level_bottle;
 extern int bin_level_can;       
 extern int bin_level_papercup;  
 extern int bin_level_others; 
-extern int backdoor;
+extern bool backdoor;
 
 void setup_Controlls();
 void check_level();
@@ -18,7 +18,5 @@ void LedOn();
 void LedOFF();
 void moveToTrashType(String detected);
 void stopMotor();
-void GreenOn();
-void GreenOFF();
 
 #endif

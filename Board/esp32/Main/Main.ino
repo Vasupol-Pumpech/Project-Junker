@@ -85,13 +85,25 @@ void loop() {
       LedOn();
     }
     delay(1000);
-    // Serial.println("test penraiwa");
+
+    BackDoor();
+    if (backdoor){
+      displayClear();
+      displayText("Door Open...");
+      delay(1000);
+      displayClear();
+      LedOFF();
+      return;
+    }else{
+      LedOn();
+    }
+
     displayBMP("/bottle2.bmp", 5, 20, bin_level_bottle);
     displayBMP("/can2.bmp", 160, 20, bin_level_can);
     displayBMP("/papercup2.bmp", 5, 150, bin_level_papercup);
     displayBMP("/other2.bmp", 160, 150, bin_level_others);
     
-    // //BackDoor();
+    
 
     if (detected != "none") {
         Serial.print("Detected message: ");

@@ -13,7 +13,7 @@
 #define LIMIT_PAPERCUP 25  // Limit Switch ตำแหน่ง 180° (Paper Cup)
 #define LIMIT_OTHER 26   // Limit Switch ตำแหน่ง 270° (Other)
 
-#define LIMIT_STOP 19   // Limit Stop For backdoor open
+#define LIMIT_STOP 19   // Limit Stop ของ backdoor open
 
 #define pingPin 22 // ขา Trigger
 #define inPin  21   // ขา Echo
@@ -26,7 +26,7 @@ int bin_level_can = 0;
 int bin_level_papercup = 0;  
 int bin_level_others = 0;    
 
-int backdoor = 0;
+bool backdoor = false;
 bool backdoor_state = false;
 
 int SENSOR_OFFSET = 1;  
@@ -90,19 +90,22 @@ long microsecondsToCentimeters(long microseconds) {
 void BackDoor() {
   bool limit_state = digitalRead(LIMIT_STOP);
 
-  if (limit_state == LOW && !backdoor_state) { 
-    backdoor = 1;
-    Serial.println("BackDoor Open");
-    sendMQTTMessageStr(mqtt_backdoor, "open");
-    backdoor_state = true; 
-  } 
-  else if (limit_state == HIGH && backdoor_state) {
-    backdoor = 0;
+  if (limit_state == LOW && backdoor_state) {  
+    // เมื่อกดสวิตช์ถูกกด
+    backdoor = false;
     Serial.println("BackDoor Close");
     sendMQTTMessageStr(mqtt_backdoor, "close");
     backdoor_state = false; 
+  } 
+  else if (limit_state == HIGH && !backdoor_state) {  
+    // เมื่อกดสวิตช์ไม่ถูกกด
+    backdoor = true;
+    Serial.println("BackDoor Open");
+    sendMQTTMessageStr(mqtt_backdoor, "open");
+    backdoor_state = true; 
   }
 }
+
 
 
 void moveToTrashType(String detected) {
