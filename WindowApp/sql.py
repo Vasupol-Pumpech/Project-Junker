@@ -559,7 +559,7 @@ def handle_report_status(bin_id, status):
                     SET report_status = %s, report_edit_date = %s
                     WHERE report_id = %s
                 """, (status, datetime.now(), report_id))
-                print(f"Updated report_id {report_id} for bin_id {bin_id} to status {status}")
+                #print(f"Updated report_id {report_id} for bin_id {bin_id} to status {status}")
                 
                 #location = get_bin_location(bin_id)
                 #sendmessage("admin", f"ถังขยะที่ : {bin_id} - {location} กลับมาทำงานอีกครั้ง")
