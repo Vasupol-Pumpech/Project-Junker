@@ -8,6 +8,9 @@
 
 #define NotiStuck_PIN 5 // คุมแจ้งเตือน
 #define SERVO_PIN 14  // ขาสัญญาณที่ใช้ควบคุมเซอร์โว
+#define buttonMM 13
+
+int buttonState = 0;
 
 Preferences preferences;
 Servo myServo;
@@ -58,6 +61,7 @@ void setup() {
     displayClear();
     sendBinLevelData(bin_level_bottle, bin_level_can, bin_level_papercup, bin_level_others);
     pinMode(NotiStuck_PIN, OUTPUT);
+    pinMode(buttonMM, INPUT_PULLUP);
     digitalWrite(NotiStuck_PIN, HIGH);
     LedOn();
 }
@@ -87,12 +91,22 @@ void loop() {
     delay(1000);
 
     BackDoor();
+
     if (backdoor){
+
+      buttonState = digitalRead(buttonMM);
+      if (buttonState == LOW) {  // ถ้ากดปุ่ม (LOW เพราะใช้ PULLUP)
+        moveMotor();
+      } else {
+        stopMotor();
+      }
+
       displayClear();
       displayText("Door Open...");
-      delay(1000);
+      delay(100);
       displayClear();
       LedOFF();
+      
       return;
     }else{
       LedOn();

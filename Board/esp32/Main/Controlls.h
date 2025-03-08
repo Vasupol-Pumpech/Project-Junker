@@ -18,5 +18,6 @@ void LedOn();
 void LedOFF();
 void moveToTrashType(String detected);
 void stopMotor();
+void moveMotor();
 
 #endif

@@ -146,7 +146,7 @@ void moveToTrashType(String detected) {
         break;
     }
 
-    delay(500); // หน่วงเวลาเล็กน้อยป้องกันการทำงานเร็วเกินไป
+    delay(500); 
 }
   startTime = 0;
   stopMotor();  
