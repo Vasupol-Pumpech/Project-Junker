@@ -28,7 +28,6 @@ int bin_level_others = 0;
 
 bool backdoor = false;
 bool backdoor_state = false;
-
 int SENSOR_OFFSET = 1;  
 int TANK_MAX = 44;     
 
@@ -145,8 +144,6 @@ void moveToTrashType(String detected) {
     if (millis() - startTime > 60000) {
         break;
     }
-
-    delay(500); 
 }
   startTime = 0;
   stopMotor();  

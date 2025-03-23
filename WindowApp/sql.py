@@ -827,3 +827,48 @@ def get_garbage_summary(date_type="day"):
     finally:
         cursor.close()
         db.close()
+
+def fetch_garbage_summary(date_type="day", selected_date=None):
+    """ ดึงข้อมูลขยะตามวัน, เดือน, ปี หรือทั้งหมด """
+    db = get_database_connection()
+    if not db:
+        return {}
+
+    cursor = db.cursor(pymysql.cursors.DictCursor)
+    try:
+        query = """
+            SELECT garbage_type, COUNT(*) AS count
+            FROM tbl_garbage
+        """
+        conditions = []
+        params = []
+
+        if selected_date:
+            if date_type == "day":
+                conditions.append("DATE(garbage_date) = %s")
+            elif date_type == "month":
+                conditions.append("DATE_FORMAT(garbage_date, '%%Y-%%m') = %s")
+            elif date_type == "year":
+                conditions.append("YEAR(garbage_date) = %s")
+            params.append(selected_date)
+
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        
+        query += " GROUP BY garbage_type"
+
+        print(f"SQL Query: {query}")
+        print(f"Params: {params}")
+
+        cursor.execute(query, params)
+        result = cursor.fetchall()
+
+        print(f"Query Result: {result}")
+
+        return {row["garbage_type"]: row["count"] for row in result}
+    except pymysql.MySQLError as e:
+        print(f"Database error: {e}")
+        return {}
+    finally:
+        cursor.close()
+        db.close()

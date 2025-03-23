@@ -21,6 +21,8 @@ from Telegram import sendmessageto
 from TrashDetailWindow import TrashDetailWindow
 from NotiWindow import NotificationsPopup
 from Aboutus import AboutUsWindow  
+from summarizeGarbage import SummarizeGarbageWindow
+
 class GarbageDetailsWindow(QMainWindow):
     garbage_updated = pyqtSignal()
     def __init__(self):
@@ -85,6 +87,7 @@ class GarbageDetailsWindow(QMainWindow):
         padding: 10px;
         """)
         
+        
        # ปุ่มกระดิ่ง
         notification_button = QPushButton()
         pixmap = QPixmap("pic/bell.png")  # โหลดภาพ bell.png
@@ -106,6 +109,17 @@ class GarbageDetailsWindow(QMainWindow):
         calendar_button.setStyleSheet("border: none;")  # เอาเส้นขอบออก
         calendar_button.clicked.connect(self.show_calendar_popup)  # เชื่อมต่อฟังก์ชัน
         header_layout.addWidget(calendar_button)
+
+        #ปุ่มสรปขยะ
+        summarize_button = QPushButton()
+        pixmap = QPixmap("pic/sum.png")  # โหลดภาพ
+        scaled_pixmap = pixmap.scaled(40, 40, Qt.KeepAspectRatio, Qt.SmoothTransformation)  # ปรับขนาดภาพ
+        summarize_button.setIcon(QIcon(scaled_pixmap))  # ใช้ภาพที่ปรับขนาดเป็นไอคอน
+        summarize_button.setIconSize(scaled_pixmap.size())  # กำหนดขนาดไอคอนให้ตรงกับภาพที่ปรับ
+        summarize_button.setFixedSize(40, 40)  # ขนาดของปุ่ม (ใหญ่กว่าภาพเล็กน้อย)
+        summarize_button.setStyleSheet("border: none;")  # เอาเส้นขอบออก
+        summarize_button.clicked.connect(self.open_summarize_garbage)
+        header_layout.addWidget(summarize_button)
 
         # ปุ่มเกี่ยวกับเรา
         about_button = QPushButton()
@@ -332,6 +346,10 @@ class GarbageDetailsWindow(QMainWindow):
         bottom_layout.addWidget(slider_frame) 
 
         main_layout.addLayout(bottom_layout)
+    
+    def open_summarize_garbage(self):
+        self.summarize_window = SummarizeGarbageWindow()
+        self.summarize_window.show()
 
     def load_bin_ids(self):
         """โหลด bin_id และ bin_location จากฐานข้อมูล และตั้งค่า default เป็น ID 1"""
@@ -672,7 +690,7 @@ class GarbageDetailsWindow(QMainWindow):
         full_threshold = self.slider_full.value()
         alert_threshold = self.slider_alert_percentage.value()
         
-        if alert_threshold >= full_threshold - 10:
+        if alert_threshold > full_threshold - 10:
             QMessageBox.warning(
                 self,
                 "Invalid Input",

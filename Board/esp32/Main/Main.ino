@@ -11,6 +11,7 @@
 #define buttonMM 13
 
 int buttonState = 0;
+bool resetBackdoor = false;
 
 Preferences preferences;
 Servo myServo;
@@ -32,7 +33,7 @@ void dropGabage(){
 
 void dropGage_max(){
   myServo.attach(SERVO_PIN);
-  myServo.write(50);
+  myServo.write(40);
   delay(5000);
   myServo.write(0);
   delay(5000);
@@ -106,9 +107,15 @@ void loop() {
       delay(100);
       displayClear();
       LedOFF();
-      
+      resetBackdoor = true;
       return;
     }else{
+      if (resetBackdoor) {  
+          displayClear();
+          displayText("Loading Data...");
+          check_All_Level();
+          displayClear();
+        }
       LedOn();
     }
 

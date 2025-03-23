@@ -59,7 +59,7 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
             max_level = new_full_threshold; 
 
             // บันทึกค่าใน Preferences
-            preferences.begin("bin-level", false);  //false = r/w  true = r
+            preferences.begin("bin-level", false);  // false = r/w
             preferences.putInt("min_level", min_level);
             preferences.putInt("max_level", max_level);
             preferences.end();
@@ -67,6 +67,17 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
             Serial.println("Updated min and max levels:");
             Serial.println("Min Level (alert_threshold): " + String(min_level));
             Serial.println("Max Level (full_threshold): " + String(max_level));
+
+            // **โหลดค่าจาก Preferences ใหม่ทันที**
+            preferences.begin("bin-level", true);
+            min_level = preferences.getInt("min_level", 60);
+            max_level = preferences.getInt("max_level", 90);
+            preferences.end();
+
+            Serial.println("Reloaded from Preferences:");
+            Serial.println("Min Level: " + String(min_level));
+            Serial.println("Max Level: " + String(max_level));
+            
         } else {
             Serial.println("Invalid thresholds received.");
         }
